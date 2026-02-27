@@ -11,6 +11,7 @@ Rectangle {
 
   color: AppStyle.workspaceBackgroundColor
   radius: AppStyle.workspaceRadius
+  visible: workspaceModel.count > 0 || root.specialHasWindows
   implicitWidth: workspaceRow.implicitWidth
     + AppStyle.workspaceInnerPaddingLeft
     + AppStyle.workspaceInnerPaddingRight
