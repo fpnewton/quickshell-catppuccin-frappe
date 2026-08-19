@@ -11,6 +11,7 @@ QtObject {
     readonly property int radiusPill: 16
     readonly property int fontSizeSm: 13
     readonly property int fontSizeMd: 16
+    readonly property string iconFontFamily: "JetBrainsMono Nerd Font"
 
     // Bar
     readonly property int barHeight: 42

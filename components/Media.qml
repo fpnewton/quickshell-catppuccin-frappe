@@ -112,6 +112,7 @@ Rectangle {
 
     Text {
       text: AppStyle.mediaIcon
+      font.family: AppStyle.iconFontFamily
       font.pixelSize: AppStyle.mediaFontPixelSize
       color: AppStyle.mediaIconColor
     }
@@ -246,6 +247,7 @@ Rectangle {
     Text {
       anchors.centerIn: parent
       text: parent.icon
+      font.family: AppStyle.iconFontFamily
       font.pixelSize: AppStyle.mediaControlIconPixelSize
       color: AppStyle.mediaControlIconColor
     }

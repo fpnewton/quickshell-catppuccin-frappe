@@ -90,7 +90,7 @@ Rectangle {
 
       PowerMenuItem {
         label: "Lock Screen"
-        onClicked: root.runPowerCommand(["hyprlock"])
+        onClicked: root.runPowerCommand(["loginctl", "lock-session"])
       }
 
       PowerMenuItem {

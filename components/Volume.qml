@@ -101,6 +101,7 @@ Rectangle {
 
       Text {
         text: root.outputMuted ? AppStyle.volumeOutputMutedIcon : AppStyle.volumeOutputIcon
+        font.family: AppStyle.iconFontFamily
         font.pixelSize: AppStyle.volumeFontPixelSize
         color: root.outputMuted ? AppStyle.volumeMutedIconColor : AppStyle.volumeIconColor
       }
@@ -117,6 +118,7 @@ Rectangle {
 
       Text {
         text: root.inputMuted ? AppStyle.volumeInputMutedIcon : AppStyle.volumeInputIcon
+        font.family: AppStyle.iconFontFamily
         font.pixelSize: AppStyle.volumeFontPixelSize
         color: root.inputMuted ? AppStyle.volumeMutedIconColor : AppStyle.volumeIconColor
       }
@@ -196,6 +198,7 @@ Rectangle {
         Text {
           anchors.horizontalCenter: parent.horizontalCenter
           text: root.outputMuted ? AppStyle.volumeOutputMutedIcon : AppStyle.volumeOutputIcon
+          font.family: AppStyle.iconFontFamily
           font.pixelSize: AppStyle.volumeMenuIconPixelSize
           color: root.outputMuted ? AppStyle.volumeMutedIconColor : AppStyle.volumeIconColor
         }
@@ -245,6 +248,7 @@ Rectangle {
         Text {
           anchors.horizontalCenter: parent.horizontalCenter
           text: root.inputMuted ? AppStyle.volumeInputMutedIcon : AppStyle.volumeInputIcon
+          font.family: AppStyle.iconFontFamily
           font.pixelSize: AppStyle.volumeMenuIconPixelSize
           color: root.inputMuted ? AppStyle.volumeMutedIconColor : AppStyle.volumeIconColor
         }
