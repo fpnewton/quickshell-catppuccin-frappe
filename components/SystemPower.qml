@@ -95,7 +95,7 @@ Rectangle {
 
       PowerMenuItem {
         label: "Log Out"
-        onClicked: root.runPowerCommand(["hyprctl", "dispatch", "exit"])
+        onClicked: root.runPowerCommand(["hyprctl", "dispatch", "hl.dsp.exit()"])
       }
     }
   }

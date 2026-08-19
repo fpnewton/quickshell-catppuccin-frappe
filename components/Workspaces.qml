@@ -8,6 +8,7 @@ Rectangle {
   property int activeWorkspaceId: -1
   property bool specialHasWindows: false
   property string lastWorkspaceSignature: ""
+  readonly property string localWorkspacesCommand: "/home/fraser/Projects/GitHub/hypr-local-workspaces/hypr-local-workspaces"
 
   color: AppStyle.workspaceBackgroundColor
   radius: AppStyle.workspaceRadius
@@ -177,23 +178,55 @@ Rectangle {
     }
   }
 
+  function shellQuote(value) {
+    return `'${value.toString().replace(/'/g, `'\\''`)}'`
+  }
+
+  function luaString(value) {
+    const text = value.toString()
+    for (let level = 0; ; level++) {
+      const equals = "=".repeat(level)
+      if (text.indexOf("]" + equals + "]") < 0) {
+        return "[" + equals + "[" + text + "]" + equals + "]"
+      }
+    }
+  }
+
+  function luaDispatchCommand(expression) {
+    return `hyprctl dispatch ${root.shellQuote(expression)}`
+  }
+
+  function logFailedCommand(context, command, exitCode, output) {
+    const details = output.trim()
+    console.warn(`${context} failed with exit code ${exitCode}: ${command.join(" ")}${details.length > 0 ? "\n" + details : ""}`)
+  }
+
   function switchToWorkspace(localTarget, workspaceId) {
     const localTargetIsNumeric = /^[1-9]\d*$/.test(localTarget)
     if (localTargetIsNumeric) {
+      const focusExpression = `hl.dsp.focus({ monitor = ${root.luaString(root.monitorName)} })`
       switchProc.command = [
         "sh",
         "-c",
-        `hyprctl dispatch focusmonitor '${root.monitorName}'; hypr-local-workspaces goto ${localTarget} --no-compact`
+        `${root.luaDispatchCommand(focusExpression)} && ${root.shellQuote(root.localWorkspacesCommand)} goto ${localTarget} --no-compact`
       ]
     } else {
-      switchProc.command = ["hyprctl", "dispatch", "workspace", workspaceId.toString()]
+      switchProc.command = [
+        "hyprctl",
+        "dispatch",
+        `hl.dsp.focus({ workspace = ${workspaceId} })`
+      ]
     }
     switchProc.running = true
     pollProc.running = true
   }
 
   function toggleSpecialWorkspace() {
-    specialProc.command = ["hyprctl", "dispatch", "togglespecialworkspace", "magic"]
+    specialProc.command = [
+      "hyprctl",
+      "dispatch",
+      `hl.dsp.workspace.toggle_special(${root.luaString("magic")})`
+    ]
     specialProc.running = true
     pollProc.running = true
   }
@@ -288,11 +321,49 @@ Rectangle {
   Process {
     id: switchProc
     running: false
+
+    stdout: StdioCollector {
+      id: switchStdout
+    }
+
+    stderr: StdioCollector {
+      id: switchStderr
+    }
+
+    onExited: (exitCode) => {
+      if (exitCode !== 0) {
+        root.logFailedCommand(
+          `Workspace switch for monitor '${root.monitorName}'`,
+          command,
+          exitCode,
+          switchStdout.text + switchStderr.text
+        )
+      }
+    }
   }
 
   Process {
     id: specialProc
     running: false
+
+    stdout: StdioCollector {
+      id: specialStdout
+    }
+
+    stderr: StdioCollector {
+      id: specialStderr
+    }
+
+    onExited: (exitCode) => {
+      if (exitCode !== 0) {
+        root.logFailedCommand(
+          "Special workspace toggle",
+          command,
+          exitCode,
+          specialStdout.text + specialStderr.text
+        )
+      }
+    }
   }
 
   Timer {

@@ -44,9 +44,9 @@ Per monitor, the bar is split into three zones:
 Workspace switching is integrated with `hypr-local-workspaces`:
 
 - For numeric workspace labels, clicking a workspace runs:
-  - `hyprctl dispatch focusmonitor '<monitor>'`
-  - `hypr-local-workspaces goto <n> --no-compact`
-- Non-numeric labels fall back to native Hyprland workspace dispatch.
+  - `hyprctl dispatch 'hl.dsp.focus({ monitor = "<monitor>" })'`
+  - `/home/fraser/Projects/GitHub/hypr-local-workspaces/hypr-local-workspaces goto <n> --no-compact`
+- Non-numeric labels fall back to Hyprland's Lua workspace focus dispatcher.
 
 This gives monitor-local workspace navigation behavior instead of global-only workspace targeting.
 
