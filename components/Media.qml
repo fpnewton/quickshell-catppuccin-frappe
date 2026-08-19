@@ -1,5 +1,6 @@
 import Quickshell.Io
 import Quickshell
+import Quickshell.Hyprland
 import QtQuick
 import "../config"
 
@@ -138,22 +139,6 @@ Rectangle {
   }
 
   PopupWindow {
-    id: clickOutsideCatcher
-    parentWindow: QsWindow.window
-    relativeX: 0
-    relativeY: 0
-    width: QsWindow.window ? QsWindow.window.width : 0
-    height: QsWindow.window ? QsWindow.window.height : 0
-    color: "transparent"
-    visible: root.menuVisible
-
-    MouseArea {
-      anchors.fill: parent
-      onClicked: root.menuVisible = false
-    }
-  }
-
-  PopupWindow {
     id: mediaMenu
     parentWindow: QsWindow.window
     relativeX: Math.round(root.x + root.width - width)
@@ -233,6 +218,12 @@ Rectangle {
         }
       }
     }
+  }
+
+  HyprlandFocusGrab {
+    active: root.menuVisible
+    windows: [ mediaMenu ]
+    onCleared: root.menuVisible = false
   }
 
   component MediaControlButton: Rectangle {
